@@ -19,16 +19,16 @@ p4-bmv2.ts: SUBMODULE = $(thisdir)/p4-bmv2
 p4-bmv2.ts:
 	cd $(SUBMODULE); ./autogen.sh; cd -; \
 	mkdir -p $(builddir)/p4-bmv2; \
-	cd $(builddir)/p4-bmv2; $(SUBMODULE)/configure --prefix=$(installdir) 'CPPFLAGS=-DBMLOG_DEBUG_ON -DBMLOG_TRACE_ON' 'CXXFLAGS=$(BMV2_PERF_FLAGS)'; \
+	cd $(builddir)/p4-bmv2; $(SUBMODULE)/configure --prefix=$(installdir) --with-pdfixed 'CXXFLAGS=$(BMV2_PERF_FLAGS)'; \
 	$(MAKE) -j$(NPROCS); $(MAKE) install; cd -;
 	@touch $@
 
 p4c-bmv2.ts: SUBMODULE = $(thisdir)/p4c-bmv2
 p4c-bmv2.ts:
-	cd $(SUBMODULE); ./autogen.sh; cd -; \
 	mkdir -p $(builddir)/p4c-bmv2; \
-	cd $(builddir)/p4c-bmv2; $(SUBMODULE)/configure --prefix=$(installdir) 'CPPFLAGS=-DBMLOG_DEBUG_ON -DBMLOG_TRACE_ON' 'CXXFLAGS=$(BMV2_PERF_FLAGS)'; \
-	$(MAKE) -j$(NPROCS); $(MAKE) install; cd -;
+	cd $(SUBMODULE); \
+        python setup.py build -b $(builddir)/p4c-bmv2 install --prefix $(installdir) --single-version-externally-managed --record $(builddir)/install_files.txt; \
+	cd -;
 	@touch $@
 
 setup-target.ts: p4-bmv2.ts p4c-bmv2.ts
